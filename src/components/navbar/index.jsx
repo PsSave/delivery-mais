@@ -11,17 +11,34 @@ function NavBar() {
       </button>
       
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="ms-auto me-auto mt-1">
-          <div className="input-group">
-            <input type="text" class="form-control" placeholder="Procurar restaurante" aria-label="Recipient's username" aria-describedby="button-addon2" />
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+        <div className="ms-auto me-auto mt-1 col-4">
+         <div className="input-group">
+            <input type="text" className="form-control" placeholder="Procurar um restaurante..." aria-label="Search" />
+            <button className="btn btn-danger" type="button" id="button-addon2"><i className="fas fa-search"></i> Buscar</button>
           </div>
         </div>
 
         <div className="mt-1">
-          <button className="btn btn-outline-danger me-3"><i class="fa-solid fa-location-dot"></i> Entrega: São Paulo</button>
-        </div>
+          <button className="btn btn-outline-danger me-3"><i className="fa-solid fa-location-dot"></i> Entrega: São Paulo</button>
+          {
+            //<button className="btn btn-outline-danger me-3"><i className="fa-solid fa-right-to-bracket"></i> Acessar</button>
+          }
+          <div className="btn-group">
+            <button type="button" className="btn btn-outline-danger dropdown-toggle me-3" data-bs-toggle="dropdown" aria-expanded="false">
+              <i className="fa-solid fa-user"></i>
+            </button>
+            <ul className="dropdown-menu">
+              <li><a className="dropdown-item" href="#">Pedidos</a></li>
+              <li><a className="dropdown-item" href="#">Favoritos</a></li>
+              <li><a className="dropdown-item" href="#">Perfil</a></li>
+              <li><a className="dropdown-item" href="#">Meus Endereços</a></li>
+              <li><hr className="dropdown-divider"></hr></li>
+              <li><a className="dropdown-item" href="#"> Sair</a></li>
+            </ul>
+          </div>
 
+          <button className="btn btn-outline-danger me-3"><i className="fa-solid fa-bag-shopping"></i> Sacola</button>
+        </div>
       </div>
     </div>
   </nav>

@@ -1,0 +1,18 @@
+.img-estabelecimento {
+  max-width: 100%;
+}
+
+.estabelecimento a{
+  color: #383838;
+  text-decoration: none;
+}
+
+.estabelecimento:hover {
+  background: #dddddd;
+  border-radius: 8px;
+}
+
+.avaliacao span {
+  padding-left: 5px;
+  font-size: 14px;
+}
