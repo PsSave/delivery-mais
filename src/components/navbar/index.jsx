@@ -1,11 +1,18 @@
 import "../navbar/style.css"
 import Logo from "../../assets/logo.png"
+import { Link } from "react-router-dom";
 
 function NavBar() {
+
+  function openSidebar(){
+    const event = new CustomEvent('openSidebar');
+    window.dispatchEvent(event);
+  }
+
   return <>
   <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light ps-3 pe-3">
     <div className="container-fluid">
-      <a className="navbar-brand" href="#"><img className="mt-1" src={Logo} /></a>
+      <Link className="navbar-brand" to="/"><img className="mt-1" src={Logo} /></Link>
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
       </button>
@@ -28,16 +35,16 @@ function NavBar() {
               <i className="fa-solid fa-user"></i>
             </button>
             <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="#">Pedidos</a></li>
-              <li><a className="dropdown-item" href="#">Favoritos</a></li>
-              <li><a className="dropdown-item" href="#">Perfil</a></li>
-              <li><a className="dropdown-item" href="#">Meus Endereços</a></li>
+              <li><Link className="dropdown-item" to="/pedidos">Pedidos</Link></li>
+              <li><Link className="dropdown-item" to="/favoritos">Favoritos</Link></li>
+              <li><Link className="dropdown-item" to="/perfil">Perfil</Link></li>
+              <li><Link className="dropdown-item" to="/enderecos">Meus Endereços</Link></li>
               <li><hr className="dropdown-divider"></hr></li>
-              <li><a className="dropdown-item" href="#"> Sair</a></li>
+              <li><Link className="dropdown-item" to="#"> Sair</Link></li>
             </ul>
           </div>
 
-          <button className="btn btn-outline-danger me-3"><i className="fa-solid fa-bag-shopping"></i> Sacola</button>
+          <button onClick={openSidebar} className="btn btn-outline-danger me-3"><i className="fa-solid fa-bag-shopping"></i> Sacola</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,28 @@
+import {BrowserRouter, Route, Routes} from "react-router-dom"
+import Home from "./pages/home/index.jsx";
+import Busca from "./pages/busca/index.jsx";
+import Favoritos from "./pages/favoritos/index.jsx";
+import Perfil from "./pages/perfil/index.jsx";
+import Enderecos from "./pages/enderecos/index.jsx";
+import Pedidos from "./pages/pedidos";
+import Sidebar from "./components/sidebar/index.jsx";
+import Cardapio from "./pages/cardapio";
+
+function Rotas() {
+  return <>
+    <Sidebar />
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<Home />}/>
+        <Route exact path="/busca" element={<Busca />}/>
+        <Route exact path="/cardapio" element={<Cardapio />}/>
+        <Route exact path="/pedidos" element={<Pedidos />}/>
+        <Route exact path="/favoritos" element={<Favoritos />}/>
+        <Route exact path="/perfil" element={<Perfil />}/>
+        <Route exact path="/enderecos" element={<Enderecos />}/>
+      </Routes>
+    </BrowserRouter>
+  </>;
+}
+
+export default Rotas;

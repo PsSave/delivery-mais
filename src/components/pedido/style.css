@@ -1,0 +1,19 @@
+.img-pedido {
+  max-width: 100%;
+}
+
+.pedido a{
+  color: #383838;
+  text-decoration: none;
+}
+
+.pedido:hover {
+  background: #dddddd;
+  border-radius: 8px;
+}
+
+.pedido span {
+  font-size: 14px;
+  color: #383838;
+
+}

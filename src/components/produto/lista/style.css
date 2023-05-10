@@ -1,0 +1,14 @@
+.produto-lista a {
+  text-decoration: none;
+  color: #383838;
+}
+
+.produto-lista:hover {
+  background: #dddddd;
+  border-radius: 5px;
+}
+
+.produto-lista .preco-antigo {
+  text-decoration: line-through;
+  color: #999;
+}
