@@ -7,7 +7,8 @@ import Enderecos from "./pages/enderecos/index.jsx";
 import Pedidos from "./pages/pedidos";
 import Sidebar from "./components/sidebar/index.jsx";
 import Cardapio from "./pages/cardapio";
-import Login from "./pages/login/index.jsx"
+import Login from "./pages/login/index.jsx";
+import Cadastro from "./pages/cadastro/index.jsx";
 
 function Rotas() {
   return <>
@@ -22,6 +23,7 @@ function Rotas() {
         <Route exact path="/perfil" element={<Perfil />}/>
         <Route exact path="/enderecos" element={<Enderecos />}/>
         <Route exact path="/login" element={<Login />}/>
+        <Route exact path="/cadastro" element={<Cadastro />}/>
 
       </Routes>
     </BrowserRouter>
