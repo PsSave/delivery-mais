@@ -1,3 +1,4 @@
+
 .form-login {
   width: 70%;
   padding: 15px;
@@ -10,7 +11,7 @@
 .background-login {
   object-fit: cover;
   height: 100vh;
-  width: 100%;
+  width: 99%;
   object-position: left;
 }
 

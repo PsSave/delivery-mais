@@ -1,97 +1,254 @@
-import { Link } from 'react-router-dom';
-import './style.css'
-import Logo from '../../assets/logo-pb.png'
-import Fundo from "../../assets/fundo-login.jpg"
+import { Link, useNavigate } from "react-router-dom";
+import "./style.css";
+import Logo from "../../assets/logo-pb.png";
+import Fundo from "../../assets/fundo-login.jpg";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import SaltPassword from "../../services/md5";
 
-function Cadastro(){
-  return <> 
-  <div className='row'>
-    <div className='col-sm-6 d-flex justify-content-center align-items-center text-center'>
-      <form className='cadastro-login mt-5'>
-        <h3 className='mb-4'>Crie sua conta e faça seu pedido.</h3>
-        <h6 className='mb-3'>Informe seus dados abaixo</h6>
+function Cadastro() {
+  const navigate = useNavigate();
 
-        <div className='form-floating'>
-          <input type="text" className='form-control' id='floatingInput' placeholder='Nome completo'/>
-          <label htmlFor="floatingInput">Nome completo</label>
-        </div>
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [senhaConfirm, setSenhaConfirm] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [complemento, setComplemento] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [uf, setUF] = useState("");
+  const [codCidade, setCodCidade] = useState("");
+  const [cep, setCep] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [cidades, setCidades] = useState([]); //lista de dados usa []
 
-        <div className='form-floating'>
-          <input type="email" className='form-control' id='floatingInput' placeholder='E-mail'/>
-          <label htmlFor="floatingInput">E-mail</label>
-        </div>
+  function SalvarCidade(e) {
+    const [cid, est] = e.target[e.target.selectedIndex].text.split(" - ");
+    setCidade(cid);
+    setUF(est);
+    setCodCidade(e.target.value);
+  }
 
-        <div className='row'>
-          <div className='col-lg-6'>
-            <div className='form-floating'>
-              <input type="password" className='form-control' id='floatingInput' placeholder='Senha'/>
-              <label htmlFor="floatingInput">Senha</label>
+  function ProcessaCadastro(e) {
+    e.preventDefault();
+    setMensagem("");
+
+    if (senha != senhaConfirm) {
+      setMensagem("As senhas não conferem. Digite novamente!");
+      return;
+    }
+
+    setLoading(true);
+
+    api
+      .post("v1/usuarios/registro", {
+        nome,
+        email,
+        senha: senha.length > 0 ? SaltPassword(senha) : "",
+        endereco,
+        complemento,
+        bairro,
+        cidade,
+        uf,
+        cep,
+        cod_cidade: codCidade,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          localStorage.setItem("sessionToken", response.data.token);
+          localStorage.setItem("sessionId", response.data.usuario);
+          localStorage.setItem("sessionEmail", email);
+          localStorage.setItem("sessionCodCidade", codCidade);
+          localStorage.setItem("sessionCidade", cidade);
+          localStorage.setItem("sessionUF", uf);
+          navigate("/");
+        } else {
+          setLoading(false);
+          setMensagem("Ocorreu um erro no cadastro: " + response.status);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          setMensagem(err.response.data.erro);
+        } else {
+          setMensagem("Ocorreu um erro na requisição.");
+        }
+        setLoading(false);
+      });
+  }
+
+  useEffect((e) => {
+    api
+      .get("v1/cidades")
+      .then(response => {
+        setCidades(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
+  return (
+    <>
+      <div className="row">
+        <div className="col-sm-6 d-flex justify-content-center align-items-center text-center">
+          <form className="cadastro-login mt-5">
+            <h3 className="mb-4">Crie sua conta e faça seu pedido.</h3>
+            <h6 className="mb-3">Informe seus dados abaixo</h6>
+
+            <div className="form-floating">
+              <input
+                type="text"
+                onChange={(e) => setNome(e.target.value)}
+                className="form-control"
+                id="floatingInput"
+                placeholder="Nome completo"
+              />
+              <label htmlFor="floatingInput">Nome completo</label>
             </div>
-          </div>
-          <div className='col-lg-6'>
-            <div className='form-floating'>
-              <input type="password" className='form-control' id='floatingInput' placeholder='Senha'/>
-              <label htmlFor="floatingInput">Confirmar senha</label>
+
+            <div className="form-floating">
+              <input
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-control"
+                id="floatingInput"
+                placeholder="E-mail"
+              />
+              <label htmlFor="floatingInput">E-mail</label>
             </div>
-          </div>
-        </div>
 
-        <div className='row'>
-          <div className='col-lg-8'>
-            <div className='form-floating'>
-              <input type="text" className='form-control' id='floatingInput' placeholder='Endereço'/>
-              <label htmlFor="floatingInput">Endereço</label>
+            <div className="row">
+              <div className="col-lg-6">
+                <div className="form-floating">
+                  <input
+                    type="password"
+                    onChange={(e) => setSenha(e.target.value)}
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Senha"
+                  />
+                  <label htmlFor="floatingInput">Senha</label>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="form-floating">
+                  <input
+                    type="password"
+                    onChange={(e) => setSenhaConfirm(e.target.value)}
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Senha"
+                  />
+                  <label htmlFor="floatingInput">Confirmar senha</label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className='col-lg-4'>
-          <div className='form-floating'>
-            <input type="text" className='form-control' id='floatingInput' placeholder='Complemento'/>
-            <label htmlFor="floatingInput">Complemento</label>
-          </div>
-          </div>
 
-        </div>
-
-        <div className='row'>
-          <div className='col-lg-6'>
-            <div className='form-floating'>
-              <input type="text" className='form-control' id='floatingInput' placeholder='Bairro'/>
-              <label htmlFor="floatingInput">Bairro</label>
+            <div className="row">
+              <div className="col-lg-8">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    onChange={(e) => setEndereco(e.target.value)}
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Endereço"
+                  />
+                  <label htmlFor="floatingInput">Endereço</label>
+                </div>
+              </div>
+              <div className="col-lg-4">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    onChange={(e) => setComplemento(e.target.value)}
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Complemento"
+                  />
+                  <label htmlFor="floatingInput">Complemento</label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className='col-lg-6'>
-            <div className='form-control mb-2'>
-              <select name="cidades" id="cidades">
-                <option value="">Cidades</option>
-                <option value="">São Paulo - SP</option>
-                <option value="">Bauru - SP</option>
-                <option value="">Três Lagoas - MS</option>
-                <option value="">Sorocaba - SP</option>
-              </select>
+
+            <div className="row">
+              <div className="col-lg-6">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    onChange={(e) => setBairro(e.target.value)}
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Bairro"
+                  />
+                  <label htmlFor="floatingInput">Bairro</label>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="form-control mb-2">
+                  <select name="cidades" id="cidades" onChange={SalvarCidade}>
+                    <option value="00000000">Cidades</option>
+                      {
+                        cidades.map(c => {
+                          return <option value={c.cod_cidade}>{c.cidade} - {c.uf}</option>
+                        })
+                      }
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
+
+            <div className="form-floating">
+              <input
+                type="text"
+                onChange={(e) => setCep(e.target.value)}
+                className="form-control"
+                id="floatingInput"
+                placeholder="CEP"
+              />
+              <label htmlFor="floatingInput">CEP</label>
+            </div>
+
+            <button
+              onClick={ProcessaCadastro}
+              className="w-100 btn btn-lg btn-danger"
+            >
+              {loading ? (
+                <div>
+                  <span
+                    className="spinner-border text-light"
+                    role="status"
+                  ></span>
+                  <span className="ms-2">Criando...</span>
+                </div>
+              ) : (
+                <span className="ms-2">Criar conta</span>
+              )}
+            </button>
+
+            {mensagem.length > 0 ? (
+              <div className="alert alert-danger mt-2" role="alert">
+                {mensagem}
+              </div>
+            ) : null}
+
+            <div className="mt-5">
+              <Link to="/login">Já tenho uma conta. Fazer Login!</Link>
+            </div>
+
+            <img src={Logo} alt="" className="mt-5" />
+          </form>
         </div>
 
-        <div className='form-floating'>
-          <input type="text" className='form-control' id='floatingInput' placeholder='CEP'/>
-          <label htmlFor="floatingInput">CEP</label>
+        <div className="col-sm-6 px-0 d-none d-sm-block">
+          <img className="background-cadastro" src={Fundo} alt="" />
         </div>
-
-        <button className='w-100 btn btn-lg btn-danger'>Acessar</button>
-
-        <div className='mt-5'>
-          <Link to="/login">Já tenho uma conta. Fazer Login!</Link>
-        </div>
-
-        <img src={Logo} alt="" className='mt-5'/>
-      </form>
-    </div>
-
-    <div className='col-sm-6 px-0 d-none d-sm-block'>
-      <img className='background-cadastro' src={Fundo} alt="" />
-    </div>
-  </div>
-  </>
+      </div>
+    </>
+  );
 }
 
 export default Cadastro;
