@@ -23,7 +23,7 @@ function Sidebar(){
       <div className="row produtos">
         {
           [1, 2, 3, 4].map(produto => {
-            return <Produto nome="Pizza Quatro Queijos"
+            return <Produto key={produto} nome="Pizza Quatro Queijos"
                             valor_total="80,00"
                             qtd="02"
                             valor_unit="40,00"/>

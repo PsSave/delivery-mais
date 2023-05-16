@@ -29,6 +29,10 @@ function Cadastro() {
     setCidade(cid);
     setUF(est);
     setCodCidade(e.target.value);
+
+    console.log(cid);
+    console.log(est);
+    console.log(e.target.value)
   }
 
   function ProcessaCadastro(e) {
@@ -53,7 +57,7 @@ function Cadastro() {
         cidade,
         uf,
         cep,
-        cod_cidade: codCidade,
+        cod_cidade: codCidade
       })
       .then((response) => {
         if (response.status === 201) {
@@ -79,13 +83,13 @@ function Cadastro() {
       });
   }
 
-  useEffect((e) => {
+  useEffect(() => {
     api
       .get("v1/cidades")
-      .then(response => {
+      .then((response) => {
         setCidades(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }, []);
@@ -191,11 +195,13 @@ function Cadastro() {
                 <div className="form-control mb-2">
                   <select name="cidades" id="cidades" onChange={SalvarCidade}>
                     <option value="00000000">Cidades</option>
-                      {
-                        cidades.map(c => {
-                          return <option value={c.cod_cidade}>{c.cidade} - {c.uf}</option>
-                        })
-                      }
+                    {cidades.map((c) => {
+                      return (
+                        <option key={c.cod_cidade} value={c.cod_cidade}>
+                          {c.cidade} - {c.uf}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
