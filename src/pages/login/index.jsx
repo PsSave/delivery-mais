@@ -28,9 +28,9 @@ function Login() {
     }).then(response => {
       //salvar no localStorage os dados do usuario
       localStorage.setItem('sessionToken', response.data.token);
-      localStorage.setItem('sessionId', response.data.id_usuario);
+      localStorage.setItem('sessionId', response.data.idUsuario);
       localStorage.setItem('sessionEmail', email);
-      localStorage.setItem('sessionCodCidade', response.data.cod_cidade);
+      localStorage.setItem('sessionCodCidade', response.data.codCidade);
       localStorage.setItem('sessionCidade', response.data.cidade);
       localStorage.setItem('sessionUF', response.data.uf);
       setSucesso('S')
@@ -39,7 +39,6 @@ function Login() {
     }).catch(err => {
       setSucesso('N');
       setLoading(false);
-
       console.log(err);
     })
   }

@@ -1,8 +1,16 @@
 import "../navbar/style.css"
 import Logo from "../../assets/logo.png"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function NavBar() {
+
+  const navigate = useNavigate();
+  const [busca, setBusca] = useState("");
+
+  function Buscar(){
+    navigate(`/busca?q=${busca}`)
+  }
 
   function openSidebar(){
     const event = new CustomEvent('openSidebar');
@@ -20,8 +28,8 @@ function NavBar() {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <div className="ms-auto me-auto mt-1 col-4">
          <div className="input-group">
-            <input type="text" className="form-control" placeholder="Procurar um restaurante..." aria-label="Search" />
-            <button className="btn btn-danger" type="button" id="button-addon2"><i className="fas fa-search"></i> Buscar</button>
+            <input onChange={(e) => setBusca(e.target.value)} type="text" className="form-control" placeholder="Procurar um restaurante..." aria-label="Search" />
+            <button className="btn btn-danger" onClick={Buscar}  type="button" id="button-addon2"><i className="fas fa-search"></i> Buscar</button>
           </div>
         </div>
 

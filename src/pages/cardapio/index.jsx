@@ -3,43 +3,118 @@ import "./style.css";
 import Star from "../../assets/star.png"
 import Produto from "../../components/produto/lista/index.jsx";
 import Footer from "../../components/footer";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import ProdutoModal from "../../components/produto/modal";
 
 function Cardapio(){
+
+  const {id} = useParams();
+  const [nome, setNome] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [complemento, setComplemento] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [uf, setUF] = useState('');
+  const [avaliacao, setAvaliacao] = useState(0);
+  const [qtdAvaliacao, setQtdAvaliacao] = useState(0);
+  const [vlMinPedido, setVlMinPedido] = useState(0);
+  const [vlTaxaEntrega, setVlTaxaEntrega] = useState(0);
+
+  const [foto, setFoto] = useState('');
+  const [categorias, setCategorias] = useState([]);
+  const [produtos, setProdutos] = useState([]);
+  const [isProdutoOpen, setIsProdutoOpen] = useState(false);
+
+  useEffect(()=>{
+    api.get(`/v1/estabelecimentos/${id}`)
+    .then(response => {
+      setNome(response.data[0].nome);
+      setEndereco(response.data[0].endereco);
+      setComplemento(response.data[0].complemento);
+      setBairro(response.data[0].bairro);
+      setCidade(response.data[0].cidade);
+      setUF(response.data[0].uf);
+      setAvaliacao(response.data[0].avaliacao);
+      setQtdAvaliacao(response.data[0].qtdAvaliacao);
+      setFoto(response.data[0].urlFoto);
+      setVlMinPedido(response.data[0].vlMinPedido);
+      setVlTaxaEntrega(response.data[0].vlTaxaEntrega);
+
+    }).catch(err => {
+      console.log(err);
+    })
+
+    api.get(`/v1/cardapios/${id}`)
+    .then(response => {
+      let categoriasUnica = response.data.map(item => item.categoria);
+
+      categoriasUnica = categoriasUnica.filter((itemArray, i, arrayCompleto) => {
+          return arrayCompleto.indexOf(itemArray) === i;
+        })
+
+        setCategorias(categoriasUnica);
+        setProdutos(response.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  }, []);
+
+  function openModalProduto(){
+    setIsProdutoOpen(true);
+
+  };
+
+  function closeModalProduto(){
+    setIsProdutoOpen(false);
+  };
+
   return <div className="container-fluid mt-page cardapio">
     <NavBar />
-
+    <ProdutoModal isOpen={isProdutoOpen}
+                  onRequestClose={closeModalProduto}/>
     <div className="row col-lg-8 offset-lg-2">
       <div className="col-12">
-        <img className="img-fluid rounded img-cardapio" src="https://www.nit.pt/wp-content/uploads/2021/03/dcfcd07e645d245babe887e5e2daa016.jpg" alt="" />
+        <img className="img-fluid rounded img-cardapio" src={foto} alt="" />
       </div>
 
       <div className="col-12 mt-4">
-        <h2>Burguer King</h2>
+        <h2>{nome}</h2>
 
-        <span>R Coelho Lisboa, 365 - Cidade de Bauru - São Paulo - SP</span>
+        <span>{endereco} {complemento.length > 0 ? ' - ' + complemento : null} - {bairro} - {cidade} - {uf}</span>
 
         <div className="mt-2 classificacao">
           <img src={Star} alt="" />
-          <span className="ms-1">4.0</span>
-          <span className="ms-3">18 avaliações</span>
+          <span className="ms-1">{avaliacao.toFixed(1)}</span>
+          <span className="ms-3">{qtdAvaliacao} avaliações</span>
         </div>
 
         <div className="mt-2 classificacao">
-          <span className="ms-1"><b>Taxa de entrega:</b> R$ 5,00</span>
-          <span className="ms-3"><b>Pedido mínimo:</b> R$ 25,00</span>
+          <span className="ms-1"><b>Taxa de entrega:</b> {new Intl.NumberFormat('pt-BR',{ style: 'currency',
+          currency: 'BRL'}).format(vlTaxaEntrega)}</span>
+          <span className="ms-3"><b>Pedido mínimo:</b> {new Intl.NumberFormat('pt-BR',{ style: 'currency',
+          currency: 'BRL'}).format(vlMinPedido)}</span>
         </div>
       </div>
     
     
       {
-        [1, 2, 3].map(e => {
-          return <div className="row mt-5">
+        categorias.map(categoria => {
+          return <div key={categoria} className="row mt-5">
             <div>
-              <h5>Destaque</h5>
+              <h5>{categoria}</h5>
             </div>
             {
-              [1, 2, 3, 4, 5].map(p => {
-                return <Produto />
+              produtos.map(p => {
+                return p.categoria === categoria ? 
+                <Produto  key={p.idProduto} 
+                          nome={p.nome}
+                          descricao={p.descricao}
+                          vlProduto={p.vlProduto}
+                          vlPromocao={p.vlPromocao}
+                          urlFoto={p.urlFoto}
+                          onClickProduto={openModalProduto}/> : null
               })
             }
           </div>

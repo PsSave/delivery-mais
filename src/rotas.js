@@ -17,7 +17,7 @@ function Rotas() {
       <Routes>
         <Route exact path="/" element={<Home />}/>
         <Route exact path="/busca" element={<Busca />}/>
-        <Route exact path="/cardapio" element={<Cardapio />}/>
+        <Route exact path="/cardapio/:id" element={<Cardapio />}/>
         <Route exact path="/pedidos" element={<Pedidos />}/>
         <Route exact path="/favoritos" element={<Favoritos />}/>
         <Route exact path="/perfil" element={<Perfil />}/>

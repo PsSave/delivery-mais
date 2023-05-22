@@ -7,8 +7,8 @@ import api from "../../services/api";
 import SaltPassword from "../../services/md5";
 
 function Cadastro() {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -29,10 +29,6 @@ function Cadastro() {
     setCidade(cid);
     setUF(est);
     setCodCidade(e.target.value);
-
-    console.log(cid);
-    console.log(est);
-    console.log(e.target.value)
   }
 
   function ProcessaCadastro(e) {
@@ -62,7 +58,7 @@ function Cadastro() {
       .then((response) => {
         if (response.status === 201) {
           localStorage.setItem("sessionToken", response.data.token);
-          localStorage.setItem("sessionId", response.data.usuario);
+          localStorage.setItem("sessionId", response.data.idUsuario);
           localStorage.setItem("sessionEmail", email);
           localStorage.setItem("sessionCodCidade", codCidade);
           localStorage.setItem("sessionCidade", cidade);
@@ -197,7 +193,7 @@ function Cadastro() {
                     <option value="00000000">Cidades</option>
                     {cidades.map((c) => {
                       return (
-                        <option key={c.cod_cidade} value={c.cod_cidade}>
+                        <option key={c.codCidade} value={c.codCidade}>
                           {c.cidade} - {c.uf}
                         </option>
                       );
