@@ -17,15 +17,16 @@ function Estabelecimento(props) {
               <div className="avaliacao">
                 <img src={Star} alt="" />
                 <span>{props.avaliacao.toFixed(1)} - Lanches</span>
-                {
-                  props.btnRemoverFavorito ?
-                    <button className="btn btn-sm btn-outline-danger mt-2 btn-delete">Remover <i class="fa-solid fa-trash"></i></button>
-                  : null
-                }
+               
               </div>
             </div>
           </div>
         </Link>
+        {
+                  props.btnRemoverFavorito ?
+                    <button className="btn btn-sm btn-outline-danger mt-2 btn-delete" onClick={(e) => props.onClickRemoverFavorito(props.idFavorito)}>Remover</button>
+                  : null
+                }
       </div>
     </>
   );

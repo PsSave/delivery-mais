@@ -1,8 +1,29 @@
 import "./style.css";
 import NavBar from "../../components/navbar/index.jsx";
 import Estabelecimento from "../../components/estabelecimento";
+import api from "../../services/api";
+import { useEffect, useState } from "react";
+
 
 function Favoritos() {
+
+  const[favoritos, setFavoritos] = useState([]);
+
+  function ListarFavoritos(){
+    api.get(`v1/estabelecimentos/favoritos`)
+    .then(response => setFavoritos(response.data))
+    .catch(err => console.log(err));
+  }
+
+  function DeletarFavorito(id){
+    api.delete(`v1/estabelecimentos/favoritos/${id}`)
+    .then(response => ListarFavoritos())
+    .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    ListarFavoritos();
+  }, [])
   return (
     <div className="container-fluid mt-page">
       <NavBar />
@@ -13,14 +34,18 @@ function Favoritos() {
         </div>
 
         <div className="row m-2">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((e) => {
+          {favoritos.map((estabelecimento) => {
             return (
               <Estabelecimento
-                url_img="https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/Burger-King-Novo-logo.png?mtime=20210125152539&focal=none&tmtime=20210726130340"
-                nome="Burguer King"
-                avaliacao="4.5"
-                categoria="Lanche"
-                btnRemoverFavorito="true"
+                key={estabelecimento.idEstabelecimento}
+                url_img={estabelecimento.urlLogo}
+                nome={estabelecimento.nome}
+                avaliacao={estabelecimento.avaliacao}
+                categoria={estabelecimento.categoria}
+                idEstabelecimento={estabelecimento.idEstabelecimento}
+                idFavorito={estabelecimento.idFavorito}
+                btnRemoverFavorito
+                onClickRemoverFavorito={DeletarFavorito}
               />
             );
           })}

@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import ProdutoModal from "../../components/produto/modal";
+import notFav from "../../assets/favorito.png";
+import Fav from "../../assets/favorito2.png";
 
 function Cardapio(){
 
@@ -21,6 +23,8 @@ function Cardapio(){
   const [qtdAvaliacao, setQtdAvaliacao] = useState(0);
   const [vlMinPedido, setVlMinPedido] = useState(0);
   const [vlTaxaEntrega, setVlTaxaEntrega] = useState(0);
+  const [favorito, setFavorito ] = useState(false);
+  const [idFavorito, setIdFavorito ] = useState(0);
 
   const [foto, setFoto] = useState('');
   const [categorias, setCategorias] = useState([]);
@@ -41,7 +45,8 @@ function Cardapio(){
       setFoto(response.data[0].urlFoto);
       setVlMinPedido(response.data[0].vlMinPedido);
       setVlTaxaEntrega(response.data[0].vlTaxaEntrega);
-
+      setFavorito(response.data[0].idFavorito > 0);
+      setIdFavorito(response.data[0].idFavorito);
     }).catch(err => {
       console.log(err);
     })
@@ -70,6 +75,26 @@ function Cardapio(){
     setIsProdutoOpen(false);
   };
 
+  function Favoritar(){
+    api.post('/v1/estabelecimentos/favoritos',{
+      id_estabelecimento: id
+    }).then(response => {
+      setFavorito(true);
+      setIdFavorito(response.data.id_favorito)
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  function RemoverFavorito(){
+    api.delete(`/v1/estabelecimentos/favoritos/${idFavorito}`)
+    .then(response => {
+      setFavorito(false);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
   return <div className="container-fluid mt-page cardapio">
     <NavBar />
     <ProdutoModal isOpen={isProdutoOpen}
@@ -80,10 +105,18 @@ function Cardapio(){
       </div>
 
       <div className="col-12 mt-4">
-        <h2>{nome}</h2>
+        <div className="d-flex justify-content-between">
+          <h2>{nome}</h2>
+          <div className="favorito">
+            {
+              favorito ? <img src={Fav} alt="" onClick={RemoverFavorito}/> : <img src={notFav} alt="" onClick={Favoritar}/>
+            } 
+          </div>
+        </div>
 
-        <span>{endereco} {complemento.length > 0 ? ' - ' + complemento : null} - {bairro} - {cidade} - {uf}</span>
-
+        <div className="classificacao">
+          <span>{endereco} {complemento.length > 0 ? ' - ' + complemento : null} - {bairro} - {cidade} - {uf}</span>
+        </div>
         <div className="mt-2 classificacao">
           <img src={Star} alt="" />
           <span className="ms-1">{avaliacao.toFixed(1)}</span>
