@@ -1,6 +1,16 @@
+import { useState } from "react";
 import Endereco from "../../components/endereco/lista";
 import NavBar from "../../components/navbar";
+import api from "../../services/api.js";
+
 function Enderecos() {
+
+  const [enderecos, setEnderecos] = useState([]);
+
+  function ListarEndereços(){
+    api.get(`v1/usuarios/enderecos`)
+  }
+
   return <div className="container-fluid mt-page">
     <NavBar />
 
@@ -12,7 +22,7 @@ function Enderecos() {
 
       <div className="row mt-5 ">
         {
-          [1, 2, 3, 4].map(e => {
+          enderecos.map(e => {
             return <Endereco />
           })
         }

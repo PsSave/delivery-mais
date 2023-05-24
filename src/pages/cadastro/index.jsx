@@ -58,7 +58,7 @@ function Cadastro() {
       .then((response) => {
         if (response.status === 201) {
           localStorage.setItem("sessionToken", response.data.token);
-          localStorage.setItem("sessionId", response.data.idUsuario);
+          localStorage.setItem("sessionId", response.data.id_usuario);
           localStorage.setItem("sessionEmail", email);
           localStorage.setItem("sessionCodCidade", codCidade);
           localStorage.setItem("sessionCidade", cidade);
