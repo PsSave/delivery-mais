@@ -1,0 +1,7 @@
+.endereco select {
+  width: 100%;
+  border: 0px;
+  background: white;
+  height: 30px;
+  cursor: pointer;
+}
