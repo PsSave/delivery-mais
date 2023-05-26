@@ -12,16 +12,27 @@ function Endereco(props) {
         : null}
       </div>
       <div>
-        { props.indPadrao !== 'S' ?
-          <button className="btn btn-outline-secondary me-3 m-2">Tornar Padrão</button>
+        { props.indPadrao !== 'S' && props.onClickEnderecoPadrao ?
+          <button className="btn btn-outline-secondary me-3 m-2" onClick={(e) => props.onClickEnderecoPadrao(props.idEndereco)}>Tornar Padrão</button>
         : null
         }
-        <button className="btn btn-outline-danger me-3 m-2" onClick={(e) => props.onClickEditEndereco(props.idEndereco)}>Editar</button>
-        <button className="btn btn-danger m-2">Excluir</button>
+        { props.onClickEditEndereco ?
+          <button className="btn btn-outline-danger me-3 m-2" onClick={(e) => props.onClickEditEndereco(props.idEndereco)}>Editar</button> : null
+        }
+        { props.onClickExcluirEndereco ?
+          <button className="btn btn-danger m-2" onClick={(e) => props.onClickExcluirEndereco(props.idEndereco)}>Excluir</button> : null
+        }
+        { props.onClickTrocarEndereco ?
+          <button className="btn btn-outline-danger m-2" 
+            onClick={(e) => props.onClickTrocarEndereco({
+              cidade: props.cidade,
+              uf: props.uf,
+              codCidade: props.codCidade})}
+          >Selecionar</button> : null
+        }
       </div>
     </div>
   </div>
-
 }
 
 export default Endereco;

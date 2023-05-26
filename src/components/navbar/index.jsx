@@ -34,7 +34,7 @@ function NavBar() {
         </div>
 
         <div className="mt-1">
-          <button className="btn btn-outline-danger me-3"><i className="fa-solid fa-location-dot"></i> Entrega: São Paulo</button>
+          <Link to="/trocar-endereco" className="btn btn-outline-danger me-3"><i className="fa-solid fa-location-dot"></i> Entrega: {localStorage.getItem('sessionCidade')}</Link>
           {
             //<button className="btn btn-outline-danger me-3"><i className="fa-solid fa-right-to-bracket"></i> Acessar</button>
           }

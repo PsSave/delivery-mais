@@ -37,7 +37,7 @@ function EnderecoModal(props){
         uf,
         cep,
         indPadrao,
-        codCidade
+        cod_cidade: codCidade
       }).then(response => {
         props.onRequestClose(); //fechar o modal após concluido
       }).catch(err => {
@@ -56,7 +56,7 @@ function EnderecoModal(props){
         uf,
         cep,
         indPadrao,
-        codCidade
+        cod_cidade: codCidade
       }).then(response => {
         props.onRequestClose(); //fechar o modal após concluido
       }).catch(err => {
@@ -99,8 +99,10 @@ function EnderecoModal(props){
 
     <div className="container-fluid h-100 endereco">
       <div className="col-12 mt-4">
-        <h4>Editar Endereço</h4>
-
+        { idEndereco > 0 ?       
+          <h4>Editar Endereço</h4>
+        : <h4>Novo Endereço</h4>
+        }
         <form>
           <div className="row">
             <div className="mb-3 col-8 d-inline-block">
@@ -152,8 +154,6 @@ function EnderecoModal(props){
             <button onClick={SalvarEndereco} type="button mt-3" className="btn btn-danger btn-lg">Salvar Dados</button>
           </div>
         </div>
-
-        {mensagem.length > 0 ? <div className="alert alert-danger mt-2 text-center">{mensagem}</div> : null}
       </div>
     </div> 
   </Modal>

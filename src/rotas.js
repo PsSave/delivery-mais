@@ -9,6 +9,7 @@ import Sidebar from "./components/sidebar/index.jsx";
 import Cardapio from "./pages/cardapio";
 import Login from "./pages/login/index.jsx";
 import Cadastro from "./pages/cadastro/index.jsx";
+import TrocarEndereco from "./pages/trocar-endereco/index.jsx";
 
 function Rotas() {
   return <>
@@ -24,6 +25,7 @@ function Rotas() {
         <Route exact path="/enderecos" element={<Enderecos />}/>
         <Route exact path="/login" element={<Login />}/>
         <Route exact path="/cadastro" element={<Cadastro />}/>
+        <Route exact path="/trocar-endereco" element={<TrocarEndereco />}/>
 
       </Routes>
     </BrowserRouter>

@@ -3,6 +3,8 @@ import Endereco from "../../components/endereco/lista";
 import NavBar from "../../components/navbar";
 import api from "../../services/api.js";
 import EnderecoModal from "../../components/endereco/modal";
+import { confirmAlert } from 'react-confirm-alert'; // Import o alert de deletar endereço
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 function Enderecos() {
 
@@ -36,6 +38,31 @@ function Enderecos() {
     setIsEnderecoOpen(false);
     ListarEndereços();
   }
+  function ExcluirEndereco(id){
+    confirmAlert({
+      title: 'Exclusão de endereço',
+      message: 'Você confirma a exclusão do endereço?.',
+      buttons: [
+        {
+          label: 'Sim',
+          onClick: () => {
+            api.delete(`v1/usuarios/enderecos/${id}`)
+            .then(response => ListarEndereços())
+            .catch(err => console.log(err));
+          }
+        },
+        {
+          label: 'Não',
+          onClick: () => {}
+        }
+      ]
+    });
+  }
+  function EnderecoPadrao(id){
+    api.patch(`v1/usuarios/enderecos/padrao/${id}`)
+    .then(response => ListarEndereços())
+    .catch(err => console.log(err));
+  }
 
   useEffect(()=>{
     ListarEndereços();
@@ -64,7 +91,9 @@ function Enderecos() {
             cep={e.cep}
             complemento={e.complemento}
             indPadrao={e.indPadrao}
-            onClickEditEndereco={openModalEndereco}/>
+            onClickEditEndereco={openModalEndereco}
+            onClickExcluirEndereco={ExcluirEndereco}
+            onClickEnderecoPadrao={EnderecoPadrao}/>
           })
         }
       </div>
