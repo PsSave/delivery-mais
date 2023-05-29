@@ -17,6 +17,17 @@ function NavBar() {
     window.dispatchEvent(event);
   }
 
+  function Logout(){
+    localStorage.removeItem('sessionToken');
+    localStorage.removeItem('sessionId');
+    localStorage.removeItem('sessionEmail');
+    localStorage.removeItem('sessionCodCidade');
+    localStorage.removeItem('sessionCidade');
+    localStorage.removeItem('sessionUF');
+    localStorage.removeItem('sessionNome');
+    navigate('/login');
+  };
+
   return <>
   <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light ps-3 pe-3">
     <div className="container-fluid">
@@ -48,7 +59,7 @@ function NavBar() {
               <li><Link className="dropdown-item" to="/perfil">Perfil</Link></li>
               <li><Link className="dropdown-item" to="/enderecos">Meus Endereços</Link></li>
               <li><hr className="dropdown-divider"></hr></li>
-              <li><Link className="dropdown-item" to="#"> Sair</Link></li>
+              <li><a className="dropdown-item" href="#" onClick={Logout}> Sair</a></li>
             </ul>
           </div>
 

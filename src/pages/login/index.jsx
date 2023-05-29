@@ -28,6 +28,7 @@ function Login() {
     }).then(response => {
       //salvar no localStorage os dados do usuario
       localStorage.setItem('sessionToken', response.data.token);
+      localStorage.setItem('sessionNome', response.data.nome);
       localStorage.setItem('sessionId', response.data.idUsuario);
       localStorage.setItem('sessionEmail', email);
       localStorage.setItem('sessionCodCidade', response.data.codCidade);
