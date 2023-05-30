@@ -1,18 +1,27 @@
 import "./style.css";
 import {Dock} from 'react-dock';
 import Produto from '../produto/sacola/index.jsx';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { SacolaContext } from "../../contexts/sacola";
 
 function Sidebar(){
 
   const [show, setShow] = useState(false);
-
+  const {sacola, setSacola} = useContext(SacolaContext);
 
   useEffect(() => {
     window.addEventListener('openSidebar', () => {
       setShow(true);
     });
   }, []);
+
+  function ClickRemover(id){
+    const novaSacola = sacola.filter((item, index, array) => {
+      return item.idCarrinho != id;
+    })
+
+    setSacola(novaSacola);
+  }
 
   return <Dock position="right" isVisible={show} onVisibleChange={(visible) => {
     setShow(visible);
@@ -22,11 +31,13 @@ function Sidebar(){
 
       <div className="row produtos">
         {
-          [1, 2, 3, 4].map(produto => {
-            return <Produto key={produto} nome="Pizza Quatro Queijos"
-                            valor_total="80,00"
-                            qtd="02"
-                            valor_unit="40,00"/>
+          sacola.map(produto => {
+            return <Produto key={produto} nome={produto.nome}
+                            valor_total={produto.vlUnitario * produto.qtd}
+                            qtd={produto.qtd}
+                            valor_unit={produto.vlUnitario}
+                            idCarrinho={produto.idCarrinho }
+                            onClickRemover={ClickRemover}/>
           })
         }
       </div>

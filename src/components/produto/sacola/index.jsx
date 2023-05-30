@@ -17,7 +17,7 @@ function Produto(props) {
           {props.qtd} x {props.valor_unit}
         </small>
 
-        <button className="btn btn-sm btn-outline-danger d-block mt-2"> Remover</button>
+        <button onClick={(e) => props.onClickRemover(props.idCarrinho)} className="btn btn-sm btn-outline-danger d-block mt-2"> Remover</button>
       </div>
     </div>
   </div>
