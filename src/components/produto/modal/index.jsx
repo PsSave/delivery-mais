@@ -3,8 +3,40 @@ import CloseIcon from "../../../assets/close.png"
 import "./style.css"
 import ProdutoItemRadio from "../produto-item-radio";
 import ProdutoItemCheckbox from "../produto-item-checkbox";
+import { useEffect, useState } from "react";
+import api from "../../../services/api";
 
 function ProdutoModal(props){
+
+  const [idProduto, setIdProduto] = useState(0);
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [vlPromocao, setVlPromocao] = useState('');
+  const [vlProduto, setVlProduto] = useState('');
+  const [urlFoto, setUrlFoto] = useState('');
+  const [qtd, setQtd] = useState(1);
+
+  useEffect(() => {
+    api.get(`v1/produtos/${props.idProduto}`)
+    .then(response => {
+      setIdProduto(props.idProduto);
+      setNome(response.data[0].nome);
+      setDescricao(response.data[0].descricao);
+      setVlPromocao(response.data[0].vlPromocao);
+      setVlProduto(response.data[0].vlProduto);
+      setUrlFoto(response.data[0].urlFoto);
+
+    }).catch(err => console.log(err));
+  }, [props.idProduto])
+
+  function ClickMais(){
+    setQtd(qtd + 1);
+  }
+
+  function ClickMenos(){
+    qtd > 1 ? setQtd(qtd - 1) : setQtd(1);
+  }
+
   return <Modal isOpen={props.isOpen} //verifica se está aberto ou não
                 onRequestClose={props.onRequestClose} //tratamento de fechar a tela
                 overlayClassName="react-modal-overlay" //custon do componente
@@ -16,17 +48,25 @@ function ProdutoModal(props){
     <div className="container-fluid h-100 produto-modal">
       <div className="row detalhes-produtos">
         <div>
-          <img className="img-fluid rounded img-produto-modal" src="https://diariodonordeste.verdesmares.com.br/image/contentid/policy:1.3277542:1663012513/Pizza%20de%20Calabresa.jpg?f=4x3&$p$f=eceb3e7" alt="" />
+          <img className="img-fluid rounded img-produto-modal" src={urlFoto} alt="" />
         </div>
 
         <div className="col-12 mt-4 ">
-          <h4>Pizza 4 queijos</h4>
+          <h4>{nome}</h4>
           <small className="d-block mt-2">
-            Descrição 
+            {descricao}
           </small>
-
-          <small className="mt-3 promocao">R$45,00</small>
-          <small className="mt-3 ms-4 preco-antigo">R$60,00</small>
+          { vlPromocao > 0 ? <>
+            <small className="mt-3 promocao">
+              {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(vlPromocao)}
+            </small>
+            <small className="mt-3 ms-4 preco-antigo">
+              {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(vlProduto)}
+            </small></>
+            : <small className="mt-3">
+                {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(vlProduto)}
+              </small>
+          }
         </div>
 
         <div className="col-12 mb-4">
@@ -37,9 +77,11 @@ function ProdutoModal(props){
       <div className="row">
         <div className="col-12 mt-4 d-flex justify-content-end">
           <div>
-            <button className="btn btn-outline-danger"><i class="fa-solid fa-minus"></i></button>
-            <small className="m-3 button-qtd">01</small>
-            <button className="btn btn-outline-danger"><i class="fa-solid fa-plus"></i></button>
+            <button onClick={ClickMenos} className="btn btn-outline-danger"><i class="fa-solid fa-minus"></i></button>
+            <span className="m-3 button-qtd">{qtd.toLocaleString('pt-BR', {
+              minimumIntegerDigits: 2
+            })}</span>
+            <button onClick={ClickMais} className="btn btn-outline-danger"><i class="fa-solid fa-plus"></i></button>
             <button className="btn btn-danger ms-4">Adicionar a sacola (R$ 50,00)</button>
           </div>
 

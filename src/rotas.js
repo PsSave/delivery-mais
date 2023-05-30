@@ -10,13 +10,14 @@ import Cardapio from "./pages/cardapio";
 import Login from "./pages/login/index.jsx";
 import Cadastro from "./pages/cadastro/index.jsx";
 import TrocarEndereco from "./pages/trocar-endereco/index.jsx";
+import PrivateRoute from "./components/privateRoute/index.jsx";
 
 function Rotas() {
   return <>
     <Sidebar />
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<Home />}/>
+        <Route exact path="/" element={<PrivateRoute ><Home /></PrivateRoute>}/>
         <Route exact path="/busca" element={<Busca />}/>
         <Route exact path="/cardapio/:id" element={<Cardapio />}/>
         <Route exact path="/pedidos" element={<Pedidos />}/>

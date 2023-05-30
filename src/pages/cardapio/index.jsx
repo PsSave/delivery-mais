@@ -25,6 +25,7 @@ function Cardapio(){
   const [vlTaxaEntrega, setVlTaxaEntrega] = useState(0);
   const [favorito, setFavorito ] = useState(false);
   const [idFavorito, setIdFavorito ] = useState(0);
+  const [idProduto, setIdProduto] = useState(0);
 
   const [foto, setFoto] = useState('');
   const [categorias, setCategorias] = useState([]);
@@ -66,7 +67,8 @@ function Cardapio(){
     })
   }, []);
 
-  function openModalProduto(){
+  function openModalProduto(id){
+    setIdProduto(id);
     setIsProdutoOpen(true);
 
   };
@@ -98,7 +100,8 @@ function Cardapio(){
   return <div className="container-fluid mt-page cardapio">
     <NavBar />
     <ProdutoModal isOpen={isProdutoOpen}
-                  onRequestClose={closeModalProduto}/>
+                  onRequestClose={closeModalProduto}
+                  idProduto={idProduto}/>
     <div className="row col-lg-8 offset-lg-2">
       <div className="col-12">
         <img className="img-fluid rounded img-cardapio" src={foto} alt="" />
@@ -147,6 +150,7 @@ function Cardapio(){
                           vlProduto={p.vlProduto}
                           vlPromocao={p.vlPromocao}
                           urlFoto={p.urlFoto}
+                          idProduto={p.idProduto}
                           onClickProduto={openModalProduto}/> : null
               })
             }

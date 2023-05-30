@@ -5,7 +5,7 @@ function Produto(props) {
   return (
     <>
       <div className="col-sm-6 mb-3 p-4 produto-lista">
-        <Link onClick={props.onClickProduto}>
+        <Link onClick={(e) => props.onClickProduto(props.idProduto)}>
           <div className="row p-3 ps-0 border-bottom">
             <div className="col-3">
               <img className="img-fluid rounded" src={props.urlFoto} alt="" />
@@ -22,7 +22,7 @@ function Produto(props) {
                   {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(props.vlProduto)}
                 </small> </>
               : <small className="d-inline-block mt-3">
-                  {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(props.vlPromocao)}
+                  {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(props.vlProduto)}
                 </small>
               } 
             </div>
