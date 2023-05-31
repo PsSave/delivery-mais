@@ -7,7 +7,7 @@ import { SacolaContext } from "../../contexts/sacola";
 function Sidebar(){
 
   const [show, setShow] = useState(false);
-  const {sacola, setSacola} = useContext(SacolaContext);
+  const {sacola, setSacola, subtotalSacola, descontoSacola, totalSacola, entregaSacola} = useContext(SacolaContext);
 
   useEffect(() => {
     window.addEventListener('openSidebar', () => {
@@ -33,10 +33,11 @@ function Sidebar(){
         {
           sacola.map(produto => {
             return <Produto key={produto} nome={produto.nome}
-                            valor_total={produto.vlUnitario * produto.qtd}
+                            vlTotal={produto.vlUnitario * produto.qtd}
                             qtd={produto.qtd}
-                            valor_unit={produto.vlUnitario}
-                            idCarrinho={produto.idCarrinho }
+                            vlUnitario={produto.vlUnitario}
+                            idCarrinho={produto.idCarrinho}
+                            urlFoto={produto.urlFoto}
                             onClickRemover={ClickRemover}/>
           })
         }
@@ -44,7 +45,7 @@ function Sidebar(){
       <div className="row align-items-end footer">
         <div className="col-12 d-flex justify-content-between align-items-center">
           <span>Subtotal</span>
-          <span>R$45.50</span>
+          <span>{new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(subtotalSacola)}</span>
         </div>
         <div className="col-12 d-flex justify-content-between align-items-center mt-2">
           <div className="input-group">
@@ -52,17 +53,17 @@ function Sidebar(){
             <button className="btn btn-outline-success" type="button" id="button-addon2">Applicar</button>
           </div>
           <div className="input-group justify-content-end">
-            <span className="d-inline-block text-success">- R$ 0,00</span>
+            <span className="d-inline-block text-success">- {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(descontoSacola)}</span>
           </div>
         </div>
         <div className="col-12 d-flex justify-content-between align-items-center mt-2">
           <span>Taxa de Entrega</span>
-          <span>R$ 5,00</span>
+          <span>{new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(entregaSacola)}</span>
         </div>
 
         <div className="col-12 d-flex justify-content-between align-items-center mt-3">
           <b>Total</b>
-          <h4>R$ 50,00</h4>
+          <h4>{new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(totalSacola)}</h4>
         </div>
 
         <button className="btn btn-lg btn-danger rounded-0 align-items-center btn-pedido">Finalizar Pedido</button>

@@ -1,30 +1,35 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
   const SacolaContext = createContext({});
 
   function SacolaProvider(props){
-    const item = [{
-      idCarrinho: 1,
-      idProduto: 123,
-      nome: "Pizza",
-      qtd: 2,
-      vlUnitario: 45,
-      urlFoto: "https://www.habibs.com.br/storage/products/images/12475_grid_fundo_mobile.png",
-      detalhes: []
-    },
-    {
-      idCarrinho: 2,
-      idProduto: 123,
-      nome: "PizzaABC",
-      qtd: 3,
-      vlUnitario: 35,
-      urlFoto: "https://www.habibs.com.br/storage/products/images/12475_grid_fundo_mobile.png",
-      detalhes: []
-    }]
+ 
+    const [sacola, setSacola] = useState([]);
+    const [subtotalSacola, setSubtotalSacola] = useState(0);
+    const [descontoSacola, setDescontoSacola] = useState(0);
+    const [entregaSacola, setEntregaSacola] = useState(0);  
+    const [idCupomSacola, setIdCupomSacola] = useState(0);  
+    const [totalSacola, setTotalSacola] = useState(0);  
+    const [idEstabelecimentoSacola, setIdEstabelecimentoSacola] = useState(0);  
 
-    const [sacola, setSacola] = useState(item);
+    function AddItemSacola(item){
+      setSacola([...sacola, item]);
+    }
 
-    return <SacolaContext.Provider value={{sacola, setSacola}}>
+    useEffect(() => {
+      let soma = sacola.reduce((a, b) => a + (b.vlUnitario * b.qtd), 0);
+
+      setSubtotalSacola(soma);
+    }, [sacola]);
+
+    useEffect(() => {
+
+      setTotalSacola(subtotalSacola - descontoSacola + entregaSacola);
+    }, [subtotalSacola, descontoSacola, entregaSacola]);
+
+    return <SacolaContext.Provider value={{sacola, setSacola, subtotalSacola, setSubtotalSacola,
+                                          descontoSacola, setDescontoSacola, 
+                                          entregaSacola, setEntregaSacola, idCupomSacola, setIdCupomSacola, totalSacola, setTotalSacola, idEstabelecimentoSacola, setIdEstabelecimentoSacola, AddItemSacola}}>
       {props.children}
     </SacolaContext.Provider>
   };

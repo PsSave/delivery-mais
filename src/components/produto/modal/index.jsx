@@ -3,10 +3,14 @@ import CloseIcon from "../../../assets/close.png"
 import "./style.css"
 import ProdutoItemRadio from "../produto-item-radio";
 import ProdutoItemCheckbox from "../produto-item-checkbox";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../../../services/api";
+import { SacolaContext } from "../../../contexts/sacola";
+import {v4 as uuidv4} from 'uuid';
 
 function ProdutoModal(props){
+
+  const {sacola, AddItemSacola} = useContext(SacolaContext);
 
   const [idProduto, setIdProduto] = useState(0);
   const [nome, setNome] = useState('');
@@ -25,7 +29,7 @@ function ProdutoModal(props){
       setVlPromocao(response.data[0].vlPromocao);
       setVlProduto(response.data[0].vlProduto);
       setUrlFoto(response.data[0].urlFoto);
-
+      setQtd(1);
     }).catch(err => console.log(err));
   }, [props.idProduto])
 
@@ -35,6 +39,21 @@ function ProdutoModal(props){
 
   function ClickMenos(){
     qtd > 1 ? setQtd(qtd - 1) : setQtd(1);
+  }
+
+  function AddItem(){
+    const item = {
+      idCarrinho: uuidv4(),
+      idProduto: idProduto,
+      nome: nome,
+      qtd: qtd,
+      vlUnitario: vlPromocao > 0 ? vlPromocao : vlProduto,
+      urlFoto: urlFoto,
+      detalhes: []
+    }
+
+    AddItemSacola(item);
+    props.onRequestClose();
   }
 
   return <Modal isOpen={props.isOpen} //verifica se está aberto ou não
@@ -82,7 +101,11 @@ function ProdutoModal(props){
               minimumIntegerDigits: 2
             })}</span>
             <button onClick={ClickMais} className="btn btn-outline-danger"><i class="fa-solid fa-plus"></i></button>
-            <button className="btn btn-danger ms-4">Adicionar a sacola (R$ 50,00)</button>
+            <button onClick={AddItem} className="btn btn-danger ms-4">Adicionar a sacola (
+              {new Intl.NumberFormat('pt-BR', {style:'currency', currency: 'BRL'}).format(
+                vlPromocao > 0 ? vlPromocao * qtd : vlProduto * qtd
+              )}
+              )</button>
           </div>
 
         </div>

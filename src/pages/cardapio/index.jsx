@@ -4,13 +4,16 @@ import Star from "../../assets/star.png"
 import Produto from "../../components/produto/lista/index.jsx";
 import Footer from "../../components/footer";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../../services/api";
 import ProdutoModal from "../../components/produto/modal";
 import notFav from "../../assets/favorito.png";
 import Fav from "../../assets/favorito2.png";
+import { SacolaContext } from "../../contexts/sacola";
 
 function Cardapio(){
+
+  const {sacola, idEstabelecimentoSacola, setIdEstabelecimentoSacola, setEntregaSacola} = useContext(SacolaContext);
 
   const {id} = useParams();
   const [nome, setNome] = useState('');
@@ -67,8 +70,14 @@ function Cardapio(){
     })
   }, []);
 
-  function openModalProduto(id){
-    setIdProduto(id);
+  function openModalProduto(idProd){
+    if(sacola.length > 0 && idEstabelecimentoSacola != id && idEstabelecimentoSacola > 0) {
+      alert('Já existe produto de outro estabelecimento na sacola.');
+      return;
+    }
+    setIdProduto(idProd);
+    setEntregaSacola(vlTaxaEntrega);
+    setIdEstabelecimentoSacola(id);
     setIsProdutoOpen(true);
 
   };
